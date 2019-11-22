@@ -10,6 +10,12 @@ public class Platformer_PlayerController : MonoBehaviour
     [SerializeField]
     private float jumpHeight;
 
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask whatIsGround;
+    private bool grounded;
+
+
     private Rigidbody2D playerRigidBody;
 
     // Start is called before the first frame update
@@ -18,11 +24,15 @@ public class Platformer_PlayerController : MonoBehaviour
         playerRigidBody = GetComponent<Rigidbody2D>();
     }
 
+    private void FixedUpdate()
+    {
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+    }
     // Update is called once per frame
     void Update()
     {
         //Jump
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             playerRigidBody.velocity = new Vector2(playerRigidBody.velocity.x, jumpHeight);
         }
